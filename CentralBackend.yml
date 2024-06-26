@@ -1,0 +1,48 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - 'ArelympBackend/**'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  projectName: 'ArelympBackend'
+  publishDir: '$(Build.ArtifactStagingDirectory)/publish/'
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'ArelympBackend/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(publishDir)'
+    zipAfterPublish: true
+
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'DevVPSConnection'
+    sourceFolder: '$(publishDir)'
+    contents: '**'
+    targetFolder: '/root'
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'DevVPSConnection' 
+    runOptions: 'inline'
+    inline: |
+      bash -s < /root/deployment/api-deployment.sh

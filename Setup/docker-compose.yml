@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: ArelympDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ftp:
+    image: bogem/ftp
+    environment:
+      FTP_USER: "${FTP_USER}"
+      FTP_PASS: "${FTP_PASS}"
+      PASV_ADDRESS: "127.0.0.1"
+      PASV_MIN_PORT: "47400"
+      PASV_MAX_PORT: "47470"
+    volumes:
+      - /home/ftpserver:/home/vsftpd
+    ports:
+      - "20:20"
+      - "21:21"
+      - "47400-47470:47400-47470"
+    restart: always
+
+volumes:
+  mssql-data:

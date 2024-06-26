@@ -1,0 +1,20 @@
+{
+  // Director
+  "OpenMatchMatchFunctionHost": "arelymp-match-function",
+  "OpenMatchMatchFunctionPort": 51502,
+  "OpenMatchBackendService": "open-match-backend:51505",
+  "GameServerPort": "7777",
+  "AppName": "Arelymp",
+  "AppVersion": "arelympv0.1.1",
+  "ArbitriumAPI": "https://api.edgegap.com/",
+  "ApiToken": "443b4ca8-0d2f-42c1-a826-15b0386860ef",
+  "DeploymentTag": "Arelymp Test Version",
+
+  // Frontend
+  "FrontendBaseUrl": "open-match-frontend:51504",
+  "FrontedApiKey": "yorjgnfwlmkkmzkzwiuorklffpleavyuklqdepqwcclhraekgjhnwkyfjkwwnwzkuckpkingcxklieaprzfsmgelyftttgcuzybpxyotrurjjzhopgobzjewnzmkxynu",
+
+  // Match Function
+  "OpenMatchQueryService": "open-match-query:51503",
+  "MatchName": "basics-match-function"
+}

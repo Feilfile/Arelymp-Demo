@@ -1,0 +1,206 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Matchmaker",
+    "version": "v0.1"
+  },
+  "paths": {
+    "/v1/tickets": {
+      "post": {
+        "tags": [
+          "Ticket"
+        ],
+        "operationId": "ticketsPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketPayload"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketPayload"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMatchTicketResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMatchTicketResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMatchTicketResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tickets/{ticketId}": {
+      "get": {
+        "tags": [
+          "Ticket"
+        ],
+        "operationId": "ticketsGET",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMatchTicketResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMatchTicketResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMatchTicketResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ticket"
+        ],
+        "operationId": "ticketsDELETE",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Assignmnt": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "connection": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateTicketPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "mode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "playerId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "OpenMatchSearchFields": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "OpenMatchTicketResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignment": {
+            "$ref": "#/components/schemas/Assignmnt"
+          },
+          "search_fields": {
+            "$ref": "#/components/schemas/OpenMatchSearchFields"
+          },
+          "extensions": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ProtobufAny"
+            }
+          },
+          "create_time": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ProtobufAny": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "@type": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

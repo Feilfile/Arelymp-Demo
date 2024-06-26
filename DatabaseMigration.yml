@@ -1,0 +1,28 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - 'ArelympBackend/ArelympApi/Migrations/**'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- script: |
+    dotnet tool install --global dotnet-ef
+    cd ArelympBackend/ArelympApi
+    dotnet ef database update --connection "$(DEV-CONNECTIONSTRING)"
+  displayName: 'Execute EF Core Migrations'

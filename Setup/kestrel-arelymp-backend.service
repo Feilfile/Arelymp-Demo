@@ -1,0 +1,17 @@
+[Unit]
+Description=Example .NET Web API Application running on Ubuntu
+
+[Service]
+WorkingDirectory=/var/www/ArelympApi
+ExecStart=/usr/bin/dotnet /var/www/ArelympApi/ArelympApi.dll
+Restart=always
+# Restart service after 10 seconds if dotnet service crashes
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=dotnet-example
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production 
+Environment=ASPNETCORE_URLS=http://*:5000
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,55 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  UNITY_VERSION: '2022.3.31f1'
+  UNITY_HUB_URL: 'https://public-cdn.cloud.unity3d.com/hub/prod/UnityHub.AppImage'
+  UNITY_USERNAME: $(UNITY_USERNAME)
+  UNITY_PASSWORD: $(UNITY_PASSWORD)
+  DOCKER_USERNAME: $(DOCKER_USERNAME)
+  DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+  IMAGE_NAME: 'arelymp/gameserver'
+
+jobs:
+- job: build
+  steps:
+  - script: |
+      # Install dependencies
+      sudo apt-get update
+      sudo apt-get install -y libgtk2.0-0 libgconf-2-4 libnss3 libxss1 libasound2 xvfb wget
+
+      # Download and install Unity Hub
+      wget $UNITY_HUB_URL -O UnityHub.AppImage
+      chmod +x UnityHub.AppImage
+
+      Xvfb :99 &
+
+      echo "UNITY_USERNAME: $UNITY_USERNAME"
+      echo "UNITY_PASSWORD: $UNITY_PASSWORD"
+
+      # Log in to Unity Hub using environment variables for credentials
+      ./UnityHub.AppImage -- --headless install-license --username $UNITY_USERNAME --password $UNITY_PASSWORD
+
+      # Install Unity Editor
+      ./UnityHub.AppImage -- --headless install-editor --version $UNITY_VERSION --module linux-il2cpp
+
+      # Verify installation
+      /opt/unity/Editor/Unity -version
+    displayName: 'Install Unity Hub and Editor'
+
+  - script: |
+      # Run Unity build
+      xvfb-run --auto-servernum /opt/unity/Editor/Unity -batchmode -quit -projectPath $(Build.SourcesDirectory)/ArelympUnity -executeMethod BuildScript.BuildLinuxServer -logFile $(Build.ArtifactStagingDirectory)/build.log
+    displayName: 'Build Unity Project'
+
+  - script: |
+      # Create a Docker image
+      cd $(Build.SourcesDirectory)/Releases/linux_server
+      docker build -t $(IMAGE_NAME):latest .
+    displayName: 'Dockerize Unity Build'
+
+  - script: |
+      # Push docker image
+      echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
+      docker push $(IMAGE_NAME):latest
+    displayName: 'Push Docker Image to Docker Hub'

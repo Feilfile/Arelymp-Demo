@@ -1,0 +1,111 @@
+# Front End Component
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arelymp-matchmaker-front-end
+  namespace: open-match
+  labels:
+    app: arelymp-matchmaker-front-end
+    component: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arelymp-matchmaker-front-end
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: arelymp-matchmaker-front-end
+        component: frontend
+    spec:
+      containers:
+      - name: arelymp-matchmaker-front-end
+        image: openmatch-frontend:v1
+        ports:
+        - containerPort: 51504
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: arelymp-matchmaker-front-end
+  namespace: open-match
+spec:
+  type: LoadBalancer
+  selector:
+    app: arelymp-matchmaker-front-end
+    component: frontend
+  type: LoadBalancer
+  ports:
+  - port: 51504
+    targetPort: 51504
+---
+# Match Function component
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arelymp-match-function
+  namespace: open-match
+  labels:
+    app: arelymp-match-function
+    component: matchfunction
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arelymp-match-function
+      component: matchfunction
+  template:
+    metadata:
+      labels:
+        app: arelymp-match-function
+        component: matchfunction
+    spec:
+      containers:
+      - name: arelymp-match-function
+        image: openmatch-match-function:v1
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: arelymp-match-function
+  namespace: open-match
+  labels:
+    app: arelymp-match-function
+    component: matchfunction
+spec:
+  selector:
+    app: arelymp-match-function
+    component: matchfunction
+  type: ClusterIP
+  ports:
+  - name: grpc
+    protocol: TCP
+    port: 50502
+    targetPort: 50502
+  - name: http
+    protocol: TCP
+    port: 51502
+    targetPort: 51502
+---
+# Director component
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arelymp-director
+  namespace: open-match
+  labels:
+    app: arelymp-director
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arelymp-director
+  template:
+    metadata:
+      labels:
+        app: arelymp-director
+    spec:
+      containers:
+      - name: arelymp-director
+        image: openmatch-director:v1
