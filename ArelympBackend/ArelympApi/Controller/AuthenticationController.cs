@@ -95,23 +95,6 @@ public class AuthenticationController : ControllerBase
 
         return Ok(new AuthenticationResponse(userDto, token));
     }
-
-    [HttpGet("anonymous")]
-    //[AllowAnonymous]
-    [ProducesResponseType(typeof(TextResponseDto), StatusCodes.Status200OK)]
-    public IActionResult TestAnonyous()
-    {
-        return Ok(new TextResponseDto("Anonymous: Success"));
-    }
-
-    [HttpGet("authenticated")]
-    [Authorize]
-    [ProducesResponseType(typeof(TextResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public IActionResult TestAuthorized()
-    {
-        return Ok(new TextResponseDto("Authenticated: Success"));
-    }
     //#endif
 
     private string GenerateCustomJwt(string userId)

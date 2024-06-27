@@ -5,7 +5,7 @@ Welcome to the Arelymp mobile game project documentation. This guide provides an
 ## Table of Contents
 
 <ol>
-<li href='./test'> General Architecture</li>
+<li> <a href="#1-general-architecture"> General Architecture</li>
 <li><a href="./Docs/Authentication.md">Authentication</a> </li>
 <li><a href="./Docs/Database.md">Database, EntityFramework, and Code First Database</a> </li>
 <li> <a href="./Docs/Matchmaker.md">OpenMatch Implementation + Kubernetes Setup</a> </li>
@@ -20,3 +20,4 @@ Welcome to the Arelymp mobile game project documentation. This guide provides an
 Arelymp is a mobile game built using the Unity engine and the Mirror framework for client-to-game server communication. The game relies on a centralized backend to authorize all external requests, manage, and persist data. Authentication is handled via Google Cloud, employing the OAuth2 PKCE method for secure frontend (Unity) authentication.
 
 For a robust and scalable matchmaking system, Arelymp utilizes the open-source project OpenMatch. OpenMatch, powered by Kubernetes, dynamically deploys game server instances, adding significant complexity to the project but ensuring stability and scalability.
+

@@ -1,4 +1,4 @@
-##### <a href="../Documentation.md">< Main Page</a>
+##### <a href="../README.md">< Main Page</a>
 # 1. Authentication:
 
 This project uses a centralized backend that authorizes all requests. There are two groups that communicate with the backend: the user and the game server instances. The game server uses an API key to authenticate with the backend and only uses the endpoints defined in GameServerController.cs.

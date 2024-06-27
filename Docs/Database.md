@@ -1,4 +1,4 @@
-##### <a href="../Documentation.md">< Main Page</a>
+##### <a href="../README.md">< Main Page</a>
 # Database
 
 This project utilizes a PostgreSQL database, implemented through a code-first approach using the Entity Framework Core ORM system. This method ensures that the database structure mirrors the code structure. Each database table is defined within an entity, and the table configuration, including settings for indexes and keys, is specified within a type configuration file.
@@ -7,18 +7,36 @@ More information can be found in the Entity Framework Core documentation: https:
 
 ![image](./Database.png)
 
+All the Entity definition and configuration is done inside the DataAccess <a href="../ArelympBackend/DataAccess/">Class Library</a> of the project
+
 ### How to migrate the database
 
-1. In order to migrate the database the dotnet tools need to be installed on the machine
+To successfully migrate the database using .NET tools, follow these steps:
+<ol>
+<li><h5> Install .NET EF Tools </h5>
+
+Ensure that the .NET EF tools are installed on your machine by running:
+
+
 ```dotnet tool install --global dotnet-ef```
+</li>
+<br>
+<li>
+<h5>Add a Migration (Optional)</h5>
 
-The following commands need to be executed in the project where the Migrations folder is located:
+If you need to add a new migration, execute the following command in the project directory where the Migrations folder is located:
 
-2. Only if you want to change commits 
-```dotnet ef migrations add <commitName>```
+```dotnet ef migrations add <MigrationName>```
+</li>
+<br>
+<li>
+<h5>Update the Database</h5>
 
-3. Use the dotnet ef database update command
+To apply the migrations and update the database, run:
+
 ```dotnet ef database update```
+</li>
+</ol>
 
 ### Yaml Pipeline for automation
 

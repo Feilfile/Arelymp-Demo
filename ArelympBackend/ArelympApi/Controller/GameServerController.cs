@@ -59,14 +59,5 @@ namespace ArelympApi.Controller
 
             return Ok(result);
         }
-
-        #if DEBUG
-        [HttpGet()]    
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Test(CancellationToken cancellationToken)
-        {
-            return Ok("TestResult");
-        }
-        #endif
     }
 }
